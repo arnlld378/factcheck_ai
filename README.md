@@ -1,116 +1,110 @@
- FactCheck AI — Проверка фактов на основе AI
+ FactCheck AI — AI-Powered Fact Checker
+A free tool to fight misinformation. Paste any claim or news article — AI will instantly verify its accuracy, detect manipulation tactics, and explain its reasoning.
 
-Бесплатный инструмент для борьбы с дезинформацией. Вставь любое утверждение или новость — AI мгновенно проверит достоверность, найдёт признаки манипуляции и объяснит вывод.
+🌐 Live site: vocal-faloodeh-847691.netlify.app
 
-🌐 Живой сайт: vocal-faloodeh-847691.netlify.app
+ Why does this exist?
+In the age of social media, fake news spreads faster than the truth. Millions of people encounter misinformation every day — in news feeds, messaging apps, and on YouTube.
+FactCheck AI helps you:
 
- Зачем это нужно?
-В эпоху социальных сетей фейковые новости распространяются быстрее правды. Миллионы людей ежедневно сталкиваются с дезинформацией — в новостях, мессенджерах, на YouTube.
-FactCheck AI помогает:
-
-🛡️ Защититься от манипуляций и фейков
-🔎 Быстро проверить любое утверждение
-📚 Понять научный консенсус по спорным темам
-🧠 Развить критическое мышление
+🛡️ Protect yourself from manipulation and fake news
+🔎 Quickly verify any claim
+📚 Understand the scientific consensus on controversial topics
+🧠 Develop critical thinking skills
 
 
- Как работает
-Пользователь вводит утверждение
+ How it works
+User enters a claim
         ↓
-AI анализирует текст через OpenRouter API
+AI analyzes the text via OpenRouter API
         ↓
-Поиск научного консенсуса и источников
+Searches for scientific consensus and sources
         ↓
-Вердикт: ✅ Правда / ❌ Ложь / ⚠️ Частично / ❓ Неизвестно
+Verdict: ✅ True / ❌ False / ⚠️ Partially / ❓ Unknown
         ↓
-Детальный анализ + источники + признаки манипуляции
-Сайт использует модели искусственного интеллекта через OpenRouter API — платформу, которая даёт доступ к десяткам AI-моделей, часть из которых полностью бесплатна.
+Detailed analysis + sources + manipulation flags
+The site uses artificial intelligence models via OpenRouter API — a platform that provides access to dozens of AI models, some of which are completely free.
 
- Инструкция по использованию
-Шаг 1 — Получи бесплатный API ключ
+ How to use
+Step 1 — Get a free API key
 
-Зайди на openrouter.ai
-Нажми "Sign Up" и создай аккаунт (можно через Google)
-Перейди в раздел Keys
-Нажми "Create Key"
-Скопируй ключ — он выглядит так: sk-or-v1-...
+Go to openrouter.ai
+Click "Sign Up" and create an account (Google login supported)
+Navigate to the Keys section
+Click "Create Key"
+Copy your key — it looks like this: sk-or-v1-...
 
+ The key is completely free. Free models are marked with a ✓
 
- Ключ полностью бесплатный. Бесплатные модели отмечены значком ✓
+Step 2 — Open the site
+Visit: vocal-faloodeh-847691.netlify.app
 
+Step 3 — Enter your API key
+Paste the copied key into the "API Key" field on the site.
+ 
+ Your key is stored only in your browser and is never sent anywhere else.
 
-Шаг 2 — Открой сайт
-Перейди по ссылке: vocal-faloodeh-847691.netlify.app
+Step 4 — Choose a model
+Select an AI model from the "Model" dropdown:
+ModelQualitySpeed🔀 Auto (recommended)HighFastLlama 4 MaverickHighFastGemini 2.5 ProVery HighMediumDeepSeek Chat V3HighFastMistral SmallMediumVery Fast
 
-Шаг 3 — Введи API ключ
-Вставь скопированный ключ в поле "API Key" на сайте.
+Step 5 — Check a claim
+Option A — Text:
+Type a claim into the text box and click "Check"
+Examples:
 
- Ключ хранится только в твоём браузере и никуда не передаётся.
+The Earth is flat
+Vaccines cause autism
+5G towers spread COVID-19
+The Great Wall of China is visible from space
 
+Option B — URL:
 
-Шаг 4 — Выбери модель
-В выпадающем списке "Модель" выбери AI-модель:
-МодельКачествоСкорость🔀 Авто (рекомендуем)ВысокоеБыстроLlama 4 MaverickВысокоеБыстроGemini 2.5 ProОчень высокоеСреднеDeepSeek Chat V3ВысокоеБыстроMistral SmallСреднееОчень быстро
+Click the "🔗 URL" button
+Paste a link to a news article
+Click "Extract text" — the text will load automatically
+Click "Check"
 
-Шаг 5 — Проверь утверждение
-Вариант А — Текст:
-Введи утверждение в текстовое поле и нажми "Проверить"
-Примеры:
+ Keyboard shortcut: Ctrl+Enter to check quickly
 
-Земля плоская
-Вакцины вызывают аутизм
-5G вышки распространяют COVID-19
-Великая Китайская стена видна из космоса
+Step 6 — Read the result
+After analysis you will see:
+🏆 Verdict:
 
-Вариант Б — URL статьи:
+✅ Confirmed — the claim is supported by facts
+❌ Debunked — the claim is false
+⚠️ Partially true — contains some truth but is misleading
+❓ Cannot verify — insufficient data
 
-Нажми кнопку "🔗 URL"
-Вставь ссылку на новость
-Нажми "Извлечь текст" — текст загрузится автоматически
-Нажми "Проверить"
+📊 AI Confidence — how confident the AI is in its verdict (0–100%)
+🔬 Detailed analysis — in-depth explanation with facts
+📚 Sources — the data the AI relied on
+⚠️ Misinformation flags — manipulation tactics detected, if any
 
+ Additional features
+Check history
+All your checks are saved automatically. Go to the "History" tab to:
 
-⌨️ Горячая клавиша: Ctrl+Enter для быстрой проверки
+View past results
+Click any entry to re-run the check
+Clear your history
 
+Statistics
+The "Statistics" tab shows:
 
-Шаг 6 — Читай результат
-После анализа ты увидишь:
-🏆 Вердикт:
+Total number of claims checked
+Percentage of true vs false results
+Average AI confidence score
+Verdict distribution chart
 
-✅ Подтверждено — утверждение соответствует фактам
-❌ Опровергнуто — утверждение ложное
-⚠️ Частично верно — содержит долю правды, но вводит в заблуждение
-❓ Невозможно проверить — недостаточно данных
+Share a result
+Click the "Share ↗" button — the result is copied to your clipboard so you can send it to friends.
 
-📊 Уверенность AI — насколько уверен AI в своём выводе (0–100%)
-🔬 Детальный анализ — подробное объяснение с фактами
-📚 Источники — на какие данные опирался AI
-⚠️ Признаки дезинформации — если найдены манипуляции
+ Tech stack
+TechnologyDescriptionHTML/CSS/JSPure frontend, no frameworksOpenRouter APIAccess to AI modelsNetlifyHosting and deploymentlocalStorageStoring history in the browser
 
-📋 Дополнительные функции
-История проверок
-Все твои проверки автоматически сохраняются. Перейди на вкладку "История" чтобы:
+ Contributing
+Found a bug or have an idea? Open an Issue or submit a Pull Request!
 
-Просмотреть прошлые результаты
-Нажать на любую запись чтобы повторить проверку
-Очистить историю
-
-Статистика
-Вкладка "Статистика" показывает:
-
-Сколько утверждений проверено
-Процент правды и лжи
-Среднюю уверенность AI
-График распределения вердиктов
-
-Поделиться результатом
-Нажми кнопку "Поделиться ↗" — результат скопируется в буфер обмена, можно отправить друзьям.
-
-🛠️ Технологии
-ТехнологияОписаниеHTML/CSS/JSЧистый фронтенд, без фреймворковOpenRouter APIДоступ к AI-моделямNetlifyХостинг и деплойlocalStorageХранение истории в браузере
-
-Вклад в проект
-Нашёл баг или есть идея? Открой Issue или сделай Pull Request!
-
- Лицензия
-MIT License — используй свободно.
+ License
+MIT License — free to use.
