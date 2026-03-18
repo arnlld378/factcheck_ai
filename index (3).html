@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FactCheck AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--surface:#13131a;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8e8f0;--text2:#8888a8;--text3:#55556a;--accent:#7c6aff;--accent2:#a08fff;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--gray:#6b7280;--green-bg:rgba(34,197,94,0.08);--red-bg:rgba(239,68,68,0.08);--yellow-bg:rgba(245,158,11,0.08);--gray-bg:rgba(107,114,128,0.08)}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,106,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(124,106,255,0.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.container{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 24px}
+header{padding:48px 0 0;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:40px}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--text);letter-spacing:-0.5px}
+.logo-text span{color:var(--accent2)}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,6vw,60px);line-height:1.05;letter-spacing:-2px;margin-bottom:16px;background:linear-gradient(135deg,#e8e8f0 30%,#7c6aff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-size:17px;color:var(--text2);font-weight:300;max-width:480px;margin:0 auto 40px;line-height:1.6}
+.free-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid rgba(34,197,94,0.25);border-radius:50px;padding:8px 18px;margin-bottom:40px;font-size:13px;color:var(--green);font-weight:500}
+.free-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.steps{display:flex;margin-bottom:32px;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.step{flex:1;padding:22px 18px;text-align:center}
+.step+.step{border-left:1px solid var(--border)}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.step-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.step-link{color:var(--accent2);text-decoration:none}
+.step-link:hover{text-decoration:underline}
+.model-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.row-label{font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);white-space:nowrap;text-transform:uppercase;letter-spacing:0.5px}
+.model-select{flex:1;background:none;border:none;outline:none;font-family:'DM Mono',monospace;font-size:13px;color:var(--text2);cursor:pointer;appearance:none;-webkit-appearance:none}
+.model-select option{background:#13131a;color:#e8e8f0}
+.api-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:12px;display:flex;align-items:center;gap:12px;transition:border-color 0.2s}
+.api-row:focus-within{border-color:var(--border2)}
+.api-input{flex:1;background:none;border:none;outline:none;font-family:'DM Mono',monospace;font-size:14px;color:var(--text2);min-width:0}
+.api-input::placeholder{color:var(--text3)}
+.eye-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0;transition:color 0.2s}
+.eye-btn:hover{color:var(--text2)}
+.hint{font-size:12px;color:var(--text3);margin-bottom:28px;text-align:center;line-height:1.6}
+.hint a{color:var(--accent2);text-decoration:none}
+.hint a:hover{text-decoration:underline}
+.input-wrapper{position:relative;margin-bottom:16px}
+.main-textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px 24px 80px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);resize:none;outline:none;min-height:160px;line-height:1.6;transition:border-color 0.2s}
+.main-textarea::placeholder{color:var(--text3)}
+.main-textarea:focus{border-color:var(--border2)}
+.ta-footer{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:center;justify-content:space-between}
+.char-count{font-family:'DM Mono',monospace;font-size:12px;color:var(--text3)}
+.check-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:white;border:none;border-radius:12px;padding:10px 22px;font-family:'Syne',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s,transform 0.1s,opacity 0.2s}
+.check-btn:hover{background:#6c5aef}
+.check-btn:active{transform:scale(0.98)}
+.check-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.examples{margin-bottom:56px}
+.ex-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-family:'DM Mono',monospace;margin-bottom:12px}
+.ex-list{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;color:var(--text2);cursor:pointer;transition:border-color 0.2s,color 0.2s}
+.chip:hover{border-color:var(--accent);color:var(--accent2)}
+.loading{display:none;text-align:center;padding:60px 0}
+.loading.on{display:block}
+.spinner{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.l-text{font-family:'DM Mono',monospace;font-size:13px;color:var(--text3);margin-bottom:6px}
+.l-model{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);opacity:0.6;margin-bottom:16px}
+.l-steps{display:flex;flex-direction:column;gap:6px;align-items:center}
+.l-step{font-size:13px;color:var(--text3);opacity:0;transition:opacity 0.5s}
+.l-step.vis{opacity:1;color:var(--text2)}
+.l-step.done{opacity:0.4}
+.result{display:none;margin-bottom:80px}
+.result.on{display:block;animation:fadeUp 0.4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.vcard{border-radius:20px;padding:32px;margin-bottom:20px;border:1px solid}
+.vcard.vtrue{border-color:var(--green);background:var(--green-bg)}
+.vcard.vfalse{border-color:var(--red);background:var(--red-bg)}
+.vcard.vpartial{border-color:var(--yellow);background:var(--yellow-bg)}
+.vcard.vunknown{border-color:rgba(107,114,128,0.4);background:var(--gray-bg)}
+.vheader{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
+.vicon{font-size:40px;line-height:1;flex-shrink:0}
+.vlabel{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.vtrue .vlabel{color:var(--green)}.vfalse .vlabel{color:var(--red)}.vpartial .vlabel{color:var(--yellow)}.vunknown .vlabel{color:var(--gray)}
+.vtitle{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.5px}
+.vtrue .vtitle{color:var(--green)}.vfalse .vtitle{color:var(--red)}.vpartial .vtitle{color:var(--yellow)}.vunknown .vtitle{color:var(--gray)}
+.conf-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);display:flex;justify-content:space-between;margin-bottom:6px}
+.conf-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:20px}
+.conf-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.vtrue .conf-fill{background:var(--green)}.vfalse .conf-fill{background:var(--red)}.vpartial .conf-fill{background:var(--yellow)}.vunknown .conf-fill{background:var(--gray)}
+.vsummary{font-size:15px;color:var(--text);line-height:1.7;opacity:0.9}
+.model-tag{display:inline-block;margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:3px 10px}
+.agrid{display:grid;gap:16px;margin-bottom:20px}
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px 24px}
+.atitle{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:14px}
+.abody{font-size:14px;color:var(--text2);line-height:1.7}
+.slist{display:flex;flex-direction:column;gap:10px}
+.sitem{display:flex;align-items:flex-start;gap:10px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:7px;flex-shrink:0}
+.stext{font-size:14px;color:var(--text2);line-height:1.5}
+.flags{display:flex;flex-direction:column;gap:8px}
+.fitem{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(239,68,68,0.06);border-radius:8px;border:1px solid rgba(239,68,68,0.1)}
+.ftext{font-size:13px;color:var(--text2);line-height:1.5}
+.reset-btn{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--border);border-radius:10px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text2);cursor:pointer;transition:border-color 0.2s,color 0.2s}
+.reset-btn:hover{border-color:var(--border2);color:var(--text)}
+.err{background:var(--red-bg);border:1px solid rgba(239,68,68,0.3);border-radius:16px;padding:20px 24px;font-size:14px;color:#fca5a5;line-height:1.6;display:none;margin-bottom:20px}
+.err.on{display:block;animation:fadeUp 0.3s ease}
+footer{border-top:1px solid var(--border);padding:24px 0;text-align:center;margin-top:40px}
+.ft{font-size:13px;color:var(--text3)}
+@media(max-width:600px){.steps{flex-direction:column}.step+.step{border-left:none;border-top:1px solid var(--border)}h1{font-size:32px;letter-spacing:-1px}.vtitle{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🔍</div>
+      <span class="logo-text">Fact<span>Check</span> AI</span>
+    </div>
+    <h1>Проверка фактов<br>на основе AI</h1>
+    <p class="subtitle">Вставь любое утверждение — AI проверит достоверность, найдёт признаки манипуляции и объяснит вывод.</p>
+    <div class="free-badge"><div class="free-badge-dot"></div>Бесплатно · OpenRouter API</div>
+  </header>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Зарегистрируйся</div>
+      <div class="step-desc">Зайди на <a class="step-link" href="https://openrouter.ai" target="_blank">openrouter.ai</a> и создай аккаунт — бесплатно</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Получи ключ</div>
+      <div class="step-desc">Перейди <a class="step-link" href="https://openrouter.ai/keys" target="_blank">Keys →</a> нажми "Create Key". Начинается с <span style="color:var(--accent2);font-size:11px">sk-or-v1-...</span></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Проверяй факты</div>
+      <div class="step-desc">Вставь ключ ниже и проверяй любые утверждения</div>
+    </div>
+  </div>
+
+  <div class="model-row">
+    <span class="row-label">Модель</span>
+    <select id="modelSelect" class="model-select">
+      <option value="openrouter/free">🔀 Авто (всегда работает) — рекомендуем</option>
+      <option value="meta-llama/llama-4-maverick:free">Llama 4 Maverick — бесплатно ✓</option>
+      <option value="meta-llama/llama-4-scout:free">Llama 4 Scout — бесплатно ✓</option>
+      <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro — бесплатно ✓</option>
+      <option value="deepseek/deepseek-chat-v3-0324:free">DeepSeek Chat V3 — бесплатно ✓</option>
+      <option value="mistralai/mistral-small-3.1-24b-instruct:free">Mistral Small 3.1 — бесплатно ✓</option>
+      <option value="qwen/qwen3-8b:free">Qwen3 8B — бесплатно ✓</option>
+    </select>
+  </div>
+
+  <div class="api-row">
+    <span class="row-label">API Key</span>
+    <input type="password" id="apiKey" class="api-input" placeholder="sk-or-v1-..." autocomplete="off">
+    <button class="eye-btn" onclick="toggleEye()" title="Показать/скрыть">👁</button>
+  </div>
+  <p class="hint">Ключ хранится только в браузере — никуда не передаётся.<br>Все модели со значком ✓ полностью бесплатны на OpenRouter.</p>
+
+  <div class="input-wrapper">
+    <textarea id="claimInput" class="main-textarea"
+      placeholder="Например: «Земля плоская» или «Вакцины вызывают аутизм» или вставь текст из новости..."
+      maxlength="2000" oninput="upd()"></textarea>
+    <div class="ta-footer">
+      <span class="char-count" id="cnt">0 / 2000</span>
+      <button class="check-btn" id="checkBtn" onclick="go()"><span>Проверить</span><span>→</span></button>
+    </div>
+  </div>
+
+  <div class="examples">
+    <div class="ex-label">Попробуй пример</div>
+    <div class="ex-list">
+      <div class="chip" onclick="ex(this)">Земля плоская</div>
+      <div class="chip" onclick="ex(this)">Вакцины вызывают аутизм</div>
+      <div class="chip" onclick="ex(this)">5G вышки распространяют COVID-19</div>
+      <div class="chip" onclick="ex(this)">Люди используют только 10% мозга</div>
+      <div class="chip" onclick="ex(this)">Великая Китайская стена видна из космоса</div>
+      <div class="chip" onclick="ex(this)">Эйнштейн плохо учился в школе</div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div class="l-text">Анализирую утверждение...</div>
+    <div class="l-model" id="lmodel"></div>
+    <div class="l-steps">
+      <div class="l-step" id="s1">→ Поиск источников</div>
+      <div class="l-step" id="s2">→ Анализ достоверности</div>
+      <div class="l-step" id="s3">→ Формирование вердикта</div>
+    </div>
+  </div>
+
+  <div class="err" id="err"></div>
+
+  <div class="result" id="result">
+    <div class="vcard" id="vcard">
+      <div class="vheader">
+        <div class="vicon" id="vicon"></div>
+        <div><div class="vlabel" id="vlabel"></div><div class="vtitle" id="vtitle"></div></div>
+      </div>
+      <div class="conf-label"><span>Уверенность AI</span><span id="cpct"></span></div>
+      <div class="conf-bar"><div class="conf-fill" id="cfill" style="width:0%"></div></div>
+      <div class="vsummary" id="vsum"></div>
+      <div class="model-tag" id="mtag"></div>
+    </div>
+    <div class="agrid">
+      <div class="acard"><div class="atitle">Детальный анализ</div><div class="abody" id="abody"></div></div>
+      <div class="acard"><div class="atitle">Источники и факты</div><div class="abody"><div class="slist" id="slist"></div></div></div>
+      <div class="acard" id="fcard" style="display:none"><div class="atitle">⚠ Признаки дезинформации</div><div class="flags" id="flist"></div></div>
+    </div>
+    <button class="reset-btn" onclick="reset()">← Проверить другое утверждение</button>
+  </div>
+
+  <footer><p class="ft">FactCheck AI · Powered by OpenRouter · Данные не сохраняются</p></footer>
+</div>
+<script>
+function upd(){var l=document.getElementById('claimInput').value.length;document.getElementById('cnt').textContent=l+' / 2000'}
+function ex(el){document.getElementById('claimInput').value=el.textContent;upd()}
+function toggleEye(){var i=document.getElementById('apiKey');i.type=i.type==='password'?'text':'password'}
+function setLoad(s){document.getElementById('loading').classList.toggle('on',s);document.getElementById('checkBtn').disabled=s}
+function animSteps(){['s1','s2','s3'].forEach(function(id,i){setTimeout(function(){document.getElementById(id).classList.add('vis')},i*900);setTimeout(function(){document.getElementById(id).classList.add('done')},i*900+700)})}
+function reset(){document.getElementById('result').classList.remove('on');document.getElementById('err').classList.remove('on');document.getElementById('claimInput').value='';document.getElementById('cfill').style.width='0%';upd();['s1','s2','s3'].forEach(function(id){document.getElementById(id).classList.remove('vis','done')});window.scrollTo({top:0,behavior:'smooth'})}
+function showErr(m){var e=document.getElementById('err');e.textContent=m;e.classList.add('on')}
+
+async function go(){
+  var key=document.getElementById('apiKey').value.trim();
+  var claim=document.getElementById('claimInput').value.trim();
+  var model=document.getElementById('modelSelect').value;
+  if(!key){showErr('Введи OpenRouter API ключ (sk-or-v1-...). Получи бесплатно на openrouter.ai/keys');return}
+  if(!claim){showErr('Введи утверждение для проверки.');return}
+  document.getElementById('result').classList.remove('on');
+  document.getElementById('err').classList.remove('on');
+  document.getElementById('lmodel').textContent='Модель: '+model;
+  setLoad(true);animSteps();
+  var sys='Ты строгий фактчекер. Верни ТОЛЬКО валидный JSON без markdown, без текста до или после.\n\nФормат:\n{"verdict":"true|false|partial|unknown","confidence":0-100,"shortTitle":"2-4 слова","summary":"1-2 предложения","analysis":"3-5 предложений с фактами","sources":["факт1","факт2","факт3"],"redFlags":[]}\n\nОтвечай на русском. ТОЛЬКО JSON.';
+  try{
+    var r=await fetch('https://openrouter.ai/api/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,'HTTP-Referer':window.location.href,'X-Title':'FactCheck AI'},
+      body:JSON.stringify({model:model,messages:[{role:'system',content:sys},{role:'user',content:'Проверь утверждение: "'+claim+'"'}],temperature:0.2,max_tokens:1200})
+    });
+    if(!r.ok){var e=await r.json().catch(function(){return{}});throw new Error(e&&e.error&&e.error.message?e.error.message:'Ошибка '+r.status)}
+    var d=await r.json();
+    var raw=d.choices[0].message.content;
+    raw=raw.replace(/<think>[\s\S]*?<\/think>/gi,'').replace(/```json|```/g,'').trim();
+    // Extract JSON object if surrounded by extra text
+    var m=raw.match(/\{[\s\S]*\}/);
+    if(m)raw=m[0];
+    var p=JSON.parse(raw);
+    setLoad(false);render(p,model);
+  }catch(e){
+    setLoad(false);
+    showErr(e.message.includes('JSON')?'Ошибка разбора ответа AI. Попробуй ещё раз или выбери другую модель.':'Ошибка: '+e.message);
+  }
+}
+
+function render(d,model){
+  var map={'true':{icon:'✅',label:'Подтверждено',cls:'vtrue'},'false':{icon:'❌',label:'Опровергнуто',cls:'vfalse'},'partial':{icon:'⚠️',label:'Частично верно',cls:'vpartial'},'unknown':{icon:'❓',label:'Невозможно проверить',cls:'vunknown'}};
+  var v=map[d.verdict]||map['unknown'];
+  document.getElementById('vcard').className='vcard '+v.cls;
+  document.getElementById('vicon').textContent=v.icon;
+  document.getElementById('vlabel').textContent=v.label;
+  document.getElementById('vtitle').textContent=d.shortTitle||'';
+  document.getElementById('vsum').textContent=d.summary||'';
+  document.getElementById('cpct').textContent=(d.confidence||0)+'%';
+  document.getElementById('mtag').textContent='Модель: '+model;
+  document.getElementById('cfill').style.width='0%';
+  setTimeout(function(){document.getElementById('cfill').style.width=(d.confidence||0)+'%'},100);
+  document.getElementById('abody').textContent=d.analysis||'';
+  var sl=document.getElementById('slist');sl.innerHTML='';
+  (d.sources||[]).forEach(function(s){sl.innerHTML+='<div class="sitem"><div class="sdot"></div><span class="stext">'+s+'</span></div>'});
+  var fc=document.getElementById('fcard'),fl=document.getElementById('flist');
+  if(d.redFlags&&d.redFlags.length){fl.innerHTML='';d.redFlags.forEach(function(f){fl.innerHTML+='<div class="fitem"><span style="font-size:14px;flex-shrink:0">⚠</span><span class="ftext">'+f+'</span></div>'});fc.style.display='block'}else{fc.style.display='none'}
+  document.getElementById('result').classList.add('on');
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')go()});
+</script>
+</body>
+</html>
